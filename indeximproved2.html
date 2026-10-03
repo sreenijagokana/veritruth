@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital AI Evidence Verifier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#home" data-nav="home">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/>
+        <path d="M9 12.5l2 2 4-4.5" stroke="#1d5fd1"/>
+      </svg>
+      Digital AI Evidence Verifier
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#image" data-nav="image">Image Verification</a>
+      <a href="#video" data-nav="video">Video Verification</a>
+      <a href="#about" data-nav="about">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap page">
+  <section data-view="home">
+    <div class="page-head">
+      <h1>Verify Digital Evidence with AI</h1>
+      <p class="lede">Analyze images and videos to identify signs of AI generation and manipulation.</p>
+    </div>
+    <div data-mount="home"></div>
+  </section>
+
+  <section data-view="image" hidden>
+    <div class="page-head">
+      <h1>Image Verification</h1>
+      <p class="lede">Upload a photo or graphic to check whether it is likely authentic or AI generated.</p>
+    </div>
+    <div data-mount="image"></div>
+  </section>
+
+  <section data-view="video" hidden>
+    <div class="page-head">
+      <h1>Video Verification</h1>
+      <p class="lede">Upload a clip to check for synthetic frames, unnatural motion and face manipulation.</p>
+    </div>
+    <div data-mount="video"></div>
+  </section>
+
+  <section data-view="about" hidden>
+    <div class="page-head">
+      <h1>About</h1>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Digital AI Evidence Verifier helps people examine digital media and identify possible AI-generated or manipulated content. It inspects a file for patterns that tend to differ between camera recordings and synthetic media, then reports a classification, a confidence score and the signals behind it.</p>
+        <p>Results are estimates. A confident result is a lead for further review and does not prove where a file came from.</p>
+      </div>
+      <dl class="kv">
+        <dt>Media</dt><dd>Images (JPG, PNG, WebP) and videos (MP4, MOV, WebM)</dd>
+        <dt>Checks</dt><dd>AI tool markers, camera data, image size, pixel noise</dd>
+        <dt>Output</dt><dd>Classification, confidence, analysis signals, file details</dd>
+        <dt>Build status</dt><dd>Prototype. Checks run in the browser. A trained detection model can be connected through the detection API.</dd>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in small">
+    <span>Digital AI Evidence Verifier</span>
+    <span>Prototype build. Results are estimates.</span>
+  </div>
+</footer>
+
+<template id="verifier-tpl">
+  <div class="verifier">
+    <div class="v-head">
+      <span class="label">Evidence file</span>
+      <span class="pill" data-role="status">No file selected</span>
+    </div>
+
+    <section data-stage="input">
+      <div class="drop" data-role="drop" role="button" tabindex="0">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>
+        </svg>
+        <p class="drop-title" data-role="dropTitle"></p>
+        <p class="drop-sub">or <span>browse files</span></p>
+      </div>
+      <input type="file" class="sr" data-role="input" tabindex="-1">
+
+      <div class="preview" data-role="preview" hidden>
+        <div class="media" data-role="media"></div>
+        <div class="bar">
+          <span class="fname" data-role="name"></span>
+          <button type="button" class="link-btn" data-role="remove">Remove</button>
+        </div>
+      </div>
+
+      <p class="small formats" data-role="formats"></p>
+      <p class="error" data-role="error" role="alert" hidden></p>
+      <div class="actions">
+        <button type="button" class="btn primary" data-role="verify" disabled>Verify Now</button>
+      </div>
+    </section>
+
+    <section data-stage="busy" hidden>
+      <div class="panel busy">
+        <h2 data-role="busyTitle"></h2>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-role="progressWrap"><i data-role="progress"></i></div>
+        <ol class="steps" data-role="steps"></ol>
+      </div>
+    </section>
+
+    <section data-stage="result" hidden>
+      <div class="result-grid">
+        <div class="panel r-media">
+          <div class="media" data-role="rMedia"></div>
+          <div class="bar"><span class="fname" data-role="rName"></span></div>
+        </div>
+
+        <div class="panel r-info">
+          <h2>File information</h2>
+          <dl class="kv" data-role="info"></dl>
+        </div>
+
+        <div class="panel r-verdict" data-role="verdictPanel">
+          <div class="r-top">
+            <span class="label">Result</span>
+            <span class="pill">Estimate</span>
+          </div>
+          <div>
+            <p class="verdict"><i></i><span data-role="verdict"></span></p>
+          </div>
+          <div>
+            <div class="conf"><span class="conf-num" data-role="conf"></span><span class="small">confidence</span></div>
+            <div class="meter" role="img" data-role="meterWrap"><i data-role="meter"></i></div>
+            <div class="ticks" aria-hidden="true"><span>0</span><span>50</span><span>100</span></div>
+          </div>
+          <p data-role="summary"></p>
+          <p class="note" data-role="note" hidden></p>
+          <div>
+            <h2>Analysis signals</h2>
+            <ul class="signals" data-role="signals"></ul>
+          </div>
+          <p class="small">Automated results are probabilistic. Do not use them as the only basis for a decision.</p>
+          <div class="actions" style="margin-top:0">
+            <button type="button" class="btn primary" data-role="again">Verify Another File</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script src="script.js"></script>
+</body>
+</html>
